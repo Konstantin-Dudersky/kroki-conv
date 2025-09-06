@@ -1,0 +1,16 @@
+# dsfsdf
+
+[package]
+name = "kroki-conv"
+version = "0.0.1"
+edition = "2024"
+
+[dependencies]
+bytes = "1.10.1"
+clap = { version = "4.5.47", features = ["derive"] }
+notify = "8.2.0"
+reqwest = "0.12.23"
+thiserror = "2.0.16"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tracing = "0.1.41"
+tracing-subscriber = "0.3.20"
