@@ -1,9 +1,13 @@
 # dsfsdf
 
 [package]
-name = "kroki-conv"
-version = "0.0.1"
+description = "Конвертер текстовых файлов в диаграммы с помощью kroki"
 edition = "2024"
+homepage = "https://github.com/Konstantin-Dudersky/kroki-conv"
+license = "GPL-3.0"
+name = "kroki-conv"
+repository = "https://github.com/Konstantin-Dudersky/kroki-conv"
+version = "0.0.1"
 
 [dependencies]
 bytes = "1.10.1"
