@@ -1,5 +1,3 @@
-# dsfsdf
-
 [package]
 description = "Конвертер текстовых файлов в диаграммы с помощью kroki"
 edition = "2024"
