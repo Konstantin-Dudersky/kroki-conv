@@ -3,7 +3,11 @@ use std::{fs::read_to_string, path::PathBuf};
 use tracing::info;
 
 pub enum DiagramKind {
+    D2,
     Graphviz,
+    Mermaid,
+    NwDiag,
+    PlantUML,
     Structurizr,
 }
 
@@ -17,6 +21,18 @@ impl DiagramInput {
         let ext = path.extension()?.to_str()?;
 
         match ext {
+            "d2" => {
+                let content = read_to_string(&path).unwrap();
+
+                info!("Found file: {}", path.display());
+
+                Some(Self {
+                    path,
+                    diagram_kind: DiagramKind::D2,
+                    content,
+                })
+            }
+
             "dot" => {
                 let content = read_to_string(&path).unwrap();
 
@@ -41,13 +57,53 @@ impl DiagramInput {
                 })
             }
 
+            "mmd" => {
+                let content = read_to_string(&path).unwrap();
+
+                info!("Found file: {}", path.display());
+
+                Some(Self {
+                    path,
+                    diagram_kind: DiagramKind::Mermaid,
+                    content,
+                })
+            }
+
+            "nwdiag" => {
+                let content = read_to_string(&path).unwrap();
+
+                info!("Found file: {}", path.display());
+
+                Some(Self {
+                    path,
+                    diagram_kind: DiagramKind::NwDiag,
+                    content,
+                })
+            }
+
+            "puml" => {
+                let content = read_to_string(&path).unwrap();
+
+                info!("Found file: {}", path.display());
+
+                Some(Self {
+                    path,
+                    diagram_kind: DiagramKind::PlantUML,
+                    content,
+                })
+            }
+
             _ => None,
         }
     }
 
     pub fn endpoint(&self) -> &'static str {
         match self.diagram_kind {
+            DiagramKind::D2 => "/d2",
             DiagramKind::Graphviz => "/graphviz",
+            DiagramKind::Mermaid => "/mermaid",
+            DiagramKind::NwDiag => "/nwdiag",
+            DiagramKind::PlantUML => "/plantuml",
             DiagramKind::Structurizr => "/structurizr",
         }
     }
@@ -66,19 +122,39 @@ impl DiagramInput {
         path_pdf.set_extension("pdf");
 
         match self.diagram_kind {
+            DiagramKind::D2 => {
+                vec![(OutputFormat::Svg, path_svg)]
+            }
             DiagramKind::Graphviz => {
                 vec![
-                    (OutputFormat::Svg, path_svg),
-                    (OutputFormat::Png, path_png),
                     (OutputFormat::Jpeg, path_jpeg),
                     (OutputFormat::Pdf, path_pdf),
+                    (OutputFormat::Png, path_png),
+                    (OutputFormat::Svg, path_svg),
+                ]
+            }
+            DiagramKind::Mermaid => {
+                vec![(OutputFormat::Png, path_png), (OutputFormat::Svg, path_svg)]
+            }
+            DiagramKind::NwDiag => {
+                vec![
+                    (OutputFormat::Pdf, path_pdf),
+                    (OutputFormat::Png, path_png),
+                    (OutputFormat::Svg, path_svg),
+                ]
+            }
+            DiagramKind::PlantUML => {
+                vec![
+                    (OutputFormat::Pdf, path_pdf),
+                    (OutputFormat::Png, path_png),
+                    (OutputFormat::Svg, path_svg),
                 ]
             }
             DiagramKind::Structurizr => {
                 vec![
-                    (OutputFormat::Svg, path_svg),
-                    (OutputFormat::Png, path_png),
                     (OutputFormat::Pdf, path_pdf),
+                    (OutputFormat::Png, path_png),
+                    (OutputFormat::Svg, path_svg),
                 ]
             }
         }

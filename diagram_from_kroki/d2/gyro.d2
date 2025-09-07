@@ -1,0 +1,161 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 0
+  }
+}
+
+direction: right
+
+host_accel1 {
+    service_backend {
+        cmp_mqtt_client
+        cmp_timescaledb
+        cmp_math
+        cmp_linux_i2c_master
+    }
+}
+
+host_accel2 {
+    service_backend {
+        cmp_mqtt_client
+        cmp_timescaledb
+        cmp_math
+        cmp_linux_i2c_master
+    }
+}
+
+host_accel3 {
+    service_backend {
+        cmp_mqtt_client
+        cmp_timescaledb
+        cmp_math
+        cmp_linux_i2c_master
+    }
+}
+
+
+host_master {
+    service_frontend {
+        cmp_websocket_client_wasm
+        cmp_leptos
+    }
+
+    service_grafana {
+        icon: https://img.icons8.com/?size=100&id=2VPZtmdWJzwR&format=png&color=000000
+    }
+
+    service_timescaledb {
+        icon: https://img.icons8.com/?size=100&id=8305&format=png&color=000000
+    }
+
+    service_backend {
+        cmp_linux_can
+        cmp_slint
+        cmp_plc
+        cmp_websocket_server
+        cmp_linux_i2c_master
+        cmp_linux_uart_master
+        cmp_mqtt_client
+        cmp_timescaledb
+    }
+
+    service_nanomq {}
+
+    service_nanomq -> service_backend.cmp_mqtt_client
+    service_backend.cmp_timescaledb -> service_timescaledb
+    service_timescaledb -> service_grafana
+    service_backend.cmp_websocket_server <> service_frontend.cmp_websocket_client_wasm: Ethernet / Websocket
+}
+
+
+
+ext_transport_plc: Transport PLC {
+    icon: https://img.icons8.com/?size=100&id=bQbX7tMYRcoT&format=png&color=000000
+}
+
+ext_web_client: Web Client {
+    icon: https://img.icons8.com/?size=100&id=38536&format=png&color=000000
+}
+
+ext_sreen: Экран {
+    icon: https://img.icons8.com/?size=100&id=540&format=png&color=000000
+}
+
+ext_cnv_di16: CNV-DI16 {
+    icon: https://img.icons8.com/?size=100&id=UiguqhkFDSiA&format=png&color=000000
+}
+
+ext_cnv_rq8: CNV-RQ8 {
+    icon: https://img.icons8.com/?size=100&id=UiguqhkFDSiA&format=png&color=000000
+}
+
+ext_cnv_count6: CNV-Count6 {
+    icon: https://img.icons8.com/?size=100&id=UiguqhkFDSiA&format=png&color=000000
+}
+
+ext_VFD: ПЧ {
+    icon: https://img.icons8.com/?size=100&id=B4vR7N1hyUUt&format=png&color=000000
+}
+
+ext_accel1: Акселерометр 1 {
+    icon: https://img.icons8.com/?size=100&id=11541&format=png&color=000000
+}
+
+ext_accel2: Акселерометр 2 {
+    icon: https://img.icons8.com/?size=100&id=11541&format=png&color=000000
+}
+
+ext_accel3: Акселерометр 3 {
+    icon: https://img.icons8.com/?size=100&id=11541&format=png&color=000000
+}
+
+
+ext_accel1 -> host_accel1.service_backend.cmp_linux_i2c_master : I2C
+
+ext_accel2 -> host_accel2.service_backend.cmp_linux_i2c_master: I2C
+
+ext_accel3 -> host_accel3.service_backend.cmp_linux_i2c_master: I2C
+
+host_accel1.service_backend.cmp_mqtt_client -> host_master.service_nanomq: Ethernet / MQTT
+host_accel1.service_backend.cmp_timescaledb -> host_master.service_timescaledb: Ethernet / SQL
+
+host_accel2.service_backend.cmp_mqtt_client -> host_master.service_nanomq: Ethernet / MQTT
+host_accel2.service_backend.cmp_timescaledb -> host_master.service_timescaledb: Ethernet / SQL
+
+host_accel3.service_backend.cmp_mqtt_client -> host_master.service_nanomq: Ethernet / MQTT
+host_accel3.service_backend.cmp_timescaledb -> host_master.service_timescaledb: Ethernet / SQL
+
+ext_cnv_di16 -> host_master.service_backend.cmp_linux_i2c_master: I2C
+
+ext_cnv_rq8 <- host_master.service_backend.cmp_linux_i2c_master: I2C
+
+ext_cnv_count6 -> host_master.service_backend.cmp_linux_i2c_master: I2C
+
+ext_VFD <> host_master.service_backend.cmp_linux_uart_master: RS-485 / Modbus RTU
+
+host_master.service_backend.cmp_linux_can <> ext_transport_plc: CAN
+host_master.service_frontend -> ext_web_client: Ethernet / HTTP
+host_master.service_grafana -> ext_web_client: Ethernet / HTTP
+host_master.service_backend.cmp_slint <> ext_sreen: DSI
+
+
+# Style
+host_*.style.stroke-dash: 10
+host_*.style.font-size: 24
+host_*.style.bold: false
+
+# ext_*.style.stroke: transparent
+ext_*.style.fill: transparent
+
+**: {
+    service_*.style.bold: false
+    service_*.style.font-size: 20
+    service_*.style.stroke-dash: 2
+    service_*.height: 140
+    service_*.width: 350
+
+    cmp_*.height: 40
+    cmp_*.width: 250
+    cmp_*.style.stroke-dash: 0
+}

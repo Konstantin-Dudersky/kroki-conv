@@ -1,0 +1,25 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 0
+  }
+}
+
+Stopped (0) -> Error (5): 0.0
+Stopped (0) -> Wait (1): 0.1
+
+Wait (1) -> Error (5): 1.0
+Wait (1) -> Starting (2): 1.1
+
+Starting (2) -> Error (5) : 2.0
+Starting (2) -> Stopping (4) : 2.1
+Starting (2) -> Started (3) : 2.2
+
+Started (3) -> Error (5): 3.0
+Started (3) -> Stopping (4) : 3.1
+
+Stopping (4) -> Error (5): 4.0
+Stopping (4) -> Starting (2): 4.1
+Stopping (4) -> Stopped (0) : 4.2
+
+Error (5) -> Stopped (0): 5.0

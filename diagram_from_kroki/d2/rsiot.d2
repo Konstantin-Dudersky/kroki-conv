@@ -1,0 +1,65 @@
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 0
+  }
+}
+
+# direction: right
+
+host_client {
+}
+
+
+host_master {
+
+    service_frontend {
+        cmp_websocket_client_wasm
+        cmp_leptos
+    }
+
+    service_grafana { }
+
+    service_timescaledb { }
+
+    service_backend {
+        cmp_mqtt_client
+        cmp_websocket_server
+        cmp_timescaledb
+    }
+
+    service_nanomq {}
+
+    service_grafana <- service_timescaledb
+    service_timescaledb <- service_backend.cmp_timescaledb
+    service_frontend.cmp_websocket_client_wasm <> service_backend.cmp_websocket_server
+    service_backend.cmp_mqtt_client <> service_nanomq
+}
+
+
+host_slave {
+
+    service_backend {
+        cmp_mqtt_client
+        cmp_linux_i2c_master
+    }
+}
+
+host_client < host_master.service_frontend
+host_client < host_master.service_grafana
+host_master.service_nanomq <> host_slave.service_backend.cmp_mqtt_client
+
+
+host_*.style.stroke-dash: 10
+host_*.style.font-size: 24
+host_*.style.bold: false
+**: {
+    service_*.style.bold: false
+    service_*.style.font-size: 20
+    service_*.style.stroke-dash: 2
+    service_*.height: 140
+    service_*.width: 350
+
+    cmp_*.height: 40
+    cmp_*.width: 250
+}

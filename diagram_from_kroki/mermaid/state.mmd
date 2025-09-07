@@ -1,0 +1,20 @@
+---
+title: Simple sample
+---
+stateDiagram-v2
+    Stopped --> Wait
+    Stopped --> Error
+
+    Wait --> Starting
+    Wait --> Error
+
+    Starting --> Started
+    Starting --> Stopping : 2
+    Starting --> Error
+
+    Started --> Stopping : 1
+    Started --> Error
+
+    Stopping --> Stopped : 3
+    Stopping --> Error
+    Stopping --> Starting: 4

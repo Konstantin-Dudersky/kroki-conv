@@ -5,7 +5,8 @@ homepage = "https://github.com/Konstantin-Dudersky/kroki-conv"
 license = "GPL-3.0"
 name = "kroki-conv"
 repository = "https://github.com/Konstantin-Dudersky/kroki-conv"
-version = "0.0.1"
+version = "0.0.2"
+exclude = ["/diagram_from_kroki"]
 
 [dependencies]
 bytes = "1.10.1"

@@ -1,2 +1,4 @@
 /target
 c4-language-server.log
+
+/diagram_from_kroki/**/*.{svg,png,pdf,jpeg}

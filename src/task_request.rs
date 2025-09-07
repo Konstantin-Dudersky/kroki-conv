@@ -25,6 +25,8 @@ impl TaskRequest {
                             .post(endpoint)
                             .header(header::ACCEPT, out_type_header)
                             .header(header::CONTENT_TYPE, "text/plain")
+                            // .header("Kroki-Diagram-Options-layout", "elk")
+                            // .header("Kroki-Diagram-Options-theme", "neutral-gray")
                             .body(body)
                             .send()
                             .await
